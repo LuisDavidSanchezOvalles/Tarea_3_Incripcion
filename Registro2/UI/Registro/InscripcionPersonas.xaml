@@ -1,0 +1,51 @@
+﻿<Window x:Class="Registro2.UI.Registro.InscripcionPersonas"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Registro2.UI.Registro"
+        mc:Ignorable="d"
+        Title="InscripcionPersonas" Height="700" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="80*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="54*"/>
+            <ColumnDefinition Width="73*"/>
+            <ColumnDefinition Width="33*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFE6FBF6" Offset="1"/>
+                <GradientStop Color="White" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Label x:Name="___No_Name_" Content="Isncripción ID:" Margin="54,0,0,0" FontSize="24" HorizontalAlignment="Left" Width="166" Height="46" VerticalAlignment="Center" Grid.Row="1"/>
+        <Label x:Name="___No_Name__Copy" Content="Persona ID:" Margin="47,0,0,0" FontSize="24" HorizontalAlignment="Left" Width="173" Height="45" VerticalAlignment="Center" Grid.Row="2"/>
+        <Label x:Name="___No_Name__Copy1" Content="Comentarios:" Margin="47,0,0,0" FontSize="24" HorizontalAlignment="Left" Width="173" Height="45" VerticalAlignment="Center" Grid.Row="3"/>
+        <Label x:Name="___No_Name__Copy2" Content="Monto:" Margin="54,19,0,0" FontSize="24" HorizontalAlignment="Left" Width="108" Height="40" VerticalAlignment="Top" Grid.Row="5"/>
+        <Label x:Name="___No_Name__Copy4" Content="Fecha:" Margin="54,0,0,0" FontSize="22" Height="35" VerticalAlignment="Center" HorizontalAlignment="Left" Width="115" Grid.Row="6"/>
+        <TextBox x:Name="IdInscripcionTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="306" Height="41" FontSize="22" Grid.Column="1" Grid.Row="1"/>
+        <TextBox x:Name="PersonaIdTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="306" Height="45" FontSize="22" Grid.Column="1" Grid.Row="2"/>
+        <TextBox x:Name="ComentariosTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="306" Height="45" FontSize="22" Grid.Column="1" Grid.Row="3"/>
+        <TextBox x:Name="MontoTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="306" Height="42" FontSize="22" Grid.Column="1" Grid.Row="5" Margin="0,19,0,0"/>
+        <DatePicker x:Name="FechaDatePicker" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35" FontSize="24" Grid.Column="1" Width="306" Grid.Row="6"/>
+        <Button x:Name="NuevoButton" Content="Nuevo" HorizontalAlignment="Left" Margin="88,0,0,0" VerticalAlignment="Center" Width="74" FontSize="24" Cursor="Hand" Height="36" Grid.Row="8" Click="NuevoButton_Click"/>
+        <Button x:Name="GuardarButton" Content="Guardar" HorizontalAlignment="Center" VerticalAlignment="Center" Width="104" Height="36" FontSize="24" Cursor="Hand" Grid.Column="1" Grid.Row="8" Click="GuardarButton_Click"/>
+        <Button x:Name="EliminarButton" Content="Eliminar" HorizontalAlignment="Left" Margin="35,0,0,0" VerticalAlignment="Center" Width="105" Height="36" FontSize="24" Cursor="Hand" Grid.Column="2" Grid.Row="8" Click="EliminarButton_Click"/>
+        <Button x:Name="BuscarButton" Content="Buscar" HorizontalAlignment="Center" VerticalAlignment="Center" Height="36" Width="100" FontSize="24" Cursor="Hand" Grid.Column="2" Grid.Row="1" Click="BuscarButton_Click"/>
+        <Label x:Name="___No_Name__Copy5" Content="Balance:" FontSize="24" HorizontalAlignment="Left" Width="128" Height="45" VerticalAlignment="Center" Grid.Row="7" Margin="54,0,0,0"/>
+        <TextBox x:Name="BalanceTextBox" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="306" FontSize="22" Height="45"/>
+        <Label x:Name="___No_Name__Copy3" Content="Nombre:" Margin="54,0,0,0" FontSize="24" HorizontalAlignment="Left" Width="108" Height="40" VerticalAlignment="Center" Grid.Row="4"/>
+        <TextBox x:Name="NombreTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="306" Height="42" FontSize="22" Grid.Column="1" Grid.Row="4" Margin="0,20,0,0"/>
+    </Grid>
+</Window>

@@ -1,0 +1,45 @@
+﻿<Window x:Class="Registro2.UI.Consulta.ConsultarInscripcion"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Registro2.UI.Consulta"
+        mc:Ignorable="d"
+        Title="Consultar Inscripcion Inscripcion" Height="450" Width="800">
+    <Grid x:Name="PantallaConsultaInscripcion">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="17*"/>
+            <ColumnDefinition Width="18*"/>
+            <ColumnDefinition Width="14*"/>
+            <ColumnDefinition Width="21*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="19*"/>
+            <RowDefinition Height="55*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="340*"/>
+        </Grid.RowDefinitions>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="1"/>
+                <GradientStop Color="#FF7183B2" Offset="0.996"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <DataGrid x:Name="ConsultaDataGrid" Margin="0,5,0,10" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5"/>
+        <DatePicker x:Name="DesdeDatePicker" HorizontalAlignment="Left" Margin="22,25,0,0" VerticalAlignment="Top" Grid.Column="1" Height="24" Width="145" Grid.Row="1"/>
+        <DatePicker x:Name="HastaDatePicker" HorizontalAlignment="Left" Margin="25,25,0,0" VerticalAlignment="Top" Grid.Column="2" Height="24" Width="145" Grid.Row="1"/>
+        <TextBox x:Name="CriterioTextBox" HorizontalAlignment="Left" Margin="10,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" Height="24" Grid.Column="4" Grid.Row="1"/>
+        <Button x:Name="ConsultarButton" Content="Consultar" HorizontalAlignment="Center" Margin="0,21,0,0" VerticalAlignment="Top" Height="24" Width="72" Grid.Column="5" Grid.Row="1" Click="ConsultarButton_Click"/>
+        <Label x:Name="Label1" Content="Desde" HorizontalAlignment="Left" Margin="22,18,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="43" Grid.RowSpan="2"/>
+        <Label x:Name="Label2" Content="Hasta" HorizontalAlignment="Left" Margin="25,18,0,0" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="40" Grid.RowSpan="2"/>
+        <Label x:Name="Label3" Content="Filtro" HorizontalAlignment="Left" Margin="15,18,0,0" VerticalAlignment="Top" Grid.Column="3" Height="26" Width="38" Grid.RowSpan="2"/>
+        <Label x:Name="Label4" Content="Criterio" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top" Grid.Column="4" Height="26" Width="49" Grid.RowSpan="2"/>
+        <ComboBox x:Name="FiltroComboBox" HorizontalAlignment="Left" Margin="15,26,0,0" VerticalAlignment="Top" Width="120" Grid.Column="3" Height="22" Grid.Row="1">
+            <ComboBoxItem Content="Todo"/>
+            <ComboBoxItem Content="ID"/>
+        </ComboBox>
+    </Grid>
+</Window>
