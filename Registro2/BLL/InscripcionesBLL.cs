@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Registro2.BLL
 {
-    class InscripcionesBLL
+    public class InscripcionesBLL
     {
         public static bool Guardar(Inscripciones inscripcion)
         {
