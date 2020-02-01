@@ -124,9 +124,7 @@ namespace Registro2.BLL
 
             try
             {
-                var registroMasActualizado = db.Set<Personas>()
-                    .OrderByDescending(t => t.PersonaId)
-                    .FirstOrDefault();
+                var registroMasActualizado = db.Set<Personas>().OrderByDescending(t => t.PersonaId).FirstOrDefault();
                 valor = registroMasActualizado.PersonaId;
             }
             catch (Exception)
