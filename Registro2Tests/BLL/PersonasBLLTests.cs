@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Registro2.BLL;
+using Registro2.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Registro2.Entidades;
 
 namespace Registro2.BLL.Tests
 {
@@ -31,13 +31,13 @@ namespace Registro2.BLL.Tests
         {
             bool paso;
             Personas personas = new Personas();
-            personas.PersonaId = 0;
-            personas.Nombres = " Luis David S";
-            personas.Telefono = " 829566 ";
+            personas.PersonaId = 1;
+            personas.Nombres = " Luis David Sánchez";
+            personas.Telefono = " 8295660909";
             personas.Cedula = " 056 ";
             personas.Direccion = " Duarte ";
             personas.FechaNacimiento = DateTime.Now;
-            paso = PersonasBLL.Guardar(personas);
+            paso = PersonasBLL.Modificar(personas);
 
             Assert.AreEqual(paso, true);
         }
@@ -46,7 +46,7 @@ namespace Registro2.BLL.Tests
         public void EliminarTest()
         {
             bool paso;
-            paso = PersonasBLL.Eliminar(2);
+            paso = PersonasBLL.Eliminar(1);
 
             Assert.AreEqual(paso, true);
         }
@@ -55,7 +55,7 @@ namespace Registro2.BLL.Tests
         public void BuscarTest()
         {
             Personas personas = new Personas();
-            personas = PersonasBLL.Buscar(2);
+            personas = PersonasBLL.Buscar(1);
 
             Assert.AreEqual(personas, personas);
         }

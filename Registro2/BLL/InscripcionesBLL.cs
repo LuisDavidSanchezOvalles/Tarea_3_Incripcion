@@ -11,35 +11,14 @@ namespace Registro2.BLL
 {
     public class InscripcionesBLL
     {
-        public static bool Guardar(Inscripciones inscripcion)
+        private static bool AfectarBalancePersona(Inscripciones inscripciones)
         {
             bool paso = false;
             Contexto db = new Contexto();
 
             try
             {
-                if (db.Inscripciones.Add(inscripcion) != null)
-                    paso = db.SaveChanges() > 0;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                db.Dispose();
-            }
-
-            return paso;
-        }
-        public static bool Modificar(Inscripciones inscripcion)
-        {
-            bool paso = false;
-            Contexto db = new Contexto();
-
-            try
-            {
-                db.Entry(inscripcion).State = EntityState.Modified;
+                db.Personas.Find(inscripciones.PersonaId).Balance += inscripciones.Balance;
                 paso = db.SaveChanges() > 0;
             }
             catch (Exception)
@@ -53,15 +32,90 @@ namespace Registro2.BLL
 
             return paso;
         }
-        public static bool Eliminar(int id)
+
+        public static bool Guardar(Inscripciones inscripciones)
         {
             bool paso = false;
             Contexto db = new Contexto();
 
             try
             {
-                var eliminar = db.Inscripciones.Find(id);
-                db.Entry(eliminar).State = EntityState.Deleted;
+                if (db.Inscripciones.Add(inscripciones) != null)
+                    paso = db.SaveChanges() > 0 && AfectarBalancePersona(inscripciones);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                db.Dispose();
+            }
+
+            return paso;
+        }
+
+        private static bool AfectarBalanceEstudianteAlModificar(Inscripciones incripciones)
+        {
+            bool paso = false;
+            Contexto db = new Contexto();
+            try
+            {
+                db.Personas.Find(incripciones.PersonaId).Balance -= incripciones.Monto;
+                paso = db.SaveChanges() > 0;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                db.Dispose();
+            }
+
+            return paso;
+        }
+
+        public static bool Modificar(Inscripciones inscripciones)
+        {
+            bool paso = false;
+            Contexto db = new Contexto();
+
+            try
+            {
+                if (inscripciones.Monto > 0)
+                {
+                    db.Entry(inscripciones).State = EntityState.Modified;
+                    paso = db.SaveChanges() > 0 && AfectarBalanceEstudianteAlModificar(inscripciones);
+                }
+                else
+                {
+                    db.Entry(inscripciones).State = EntityState.Modified;
+                    paso = db.SaveChanges() > 0;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                db.Dispose();
+            }
+
+            return paso;
+        }
+        public static bool Eliminar(int id, int personaId)
+        {
+            bool paso = false;
+            Contexto db = new Contexto();
+
+            try
+            {
+                var eliminar = db.Inscripciones.Find(id).Balance = 0;
+                var Eliminar = db.Personas.Find(personaId).Balance = 0;
+                //este se encarga de eliminar el balance
 
                 paso = db.SaveChanges() > 0;
             }
@@ -95,14 +149,14 @@ namespace Registro2.BLL
             }
             return inscripcion;
         }
-        public static List<Inscripciones> GetList(Expression<Func<Inscripciones, bool>> inscripcion)
+        public static List<Inscripciones> GetList(Expression<Func<Inscripciones, bool>> inscripciones)
         {
             List<Inscripciones> Lista = new List<Inscripciones>();
             Contexto db = new Contexto();
 
             try
             {
-                Lista = db.Inscripciones.Where(inscripcion).ToList();
+                Lista = db.Inscripciones.Where(inscripciones).ToList();
             }
             catch (Exception)
             {

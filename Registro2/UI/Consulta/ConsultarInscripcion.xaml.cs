@@ -28,21 +28,21 @@ namespace Registro2.UI.Consulta
 
         private void ConsultarButton_Click(object sender, RoutedEventArgs e)
         {
-            var listado = new List<Inscripciones>();
+            var Listado = new List<Inscripciones>();
 
             if (CriterioTextBox.Text.Trim().Length > 0)
             {
                 switch (FiltroComboBox.SelectedIndex)
                 {
                     case 0: //todo
-                        listado = InscripcionesBLL.GetList(p => true);
+                        Listado = InscripcionesBLL.GetList(p => true);
                         MessageBox.Show("Todo");
                         break;
                     case 1: //ID
                         try
                         {
                             int id = Convert.ToInt32(CriterioTextBox.Text);
-                            listado = InscripcionesBLL.GetList(p => p.InscripcionId == id);
+                            Listado = InscripcionesBLL.GetList(p => p.InscripcionId == id);
                             MessageBox.Show("ID");
                         }
                         catch (FormatException)
@@ -56,14 +56,14 @@ namespace Registro2.UI.Consulta
 
                 }
                 //fecha
-                listado = listado.Where(p => p.Fecha.Date >= DesdeDatePicker.SelectedDate.Value && p.Fecha.Date <= HastaDatePicker.SelectedDate.Value).ToList();
+                Listado = Listado.Where(p => p.Fecha.Date >= DesdeDatePicker.SelectedDate.Value && p.Fecha.Date <= HastaDatePicker.SelectedDate.Value).ToList();
             }
             else
             {
-                listado = InscripcionesBLL.GetList(p => true);
+                Listado = InscripcionesBLL.GetList(p => true);
             }
             ConsultaDataGrid.ItemsSource= null;
-            ConsultaDataGrid.ItemsSource = listado;
+            ConsultaDataGrid.ItemsSource = Listado;
         }
     }
 }

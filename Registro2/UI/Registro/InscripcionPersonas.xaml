@@ -29,23 +29,23 @@
                 <GradientStop Color="White" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <Label x:Name="___No_Name_" Content="Isncripción ID:" Margin="54,0,0,0" FontSize="24" HorizontalAlignment="Left" Width="166" Height="46" VerticalAlignment="Center" Grid.Row="1"/>
-        <Label x:Name="___No_Name__Copy" Content="Persona ID:" Margin="47,0,0,0" FontSize="24" HorizontalAlignment="Left" Width="173" Height="45" VerticalAlignment="Center" Grid.Row="2"/>
-        <Label x:Name="___No_Name__Copy1" Content="Comentarios:" Margin="47,0,0,0" FontSize="24" HorizontalAlignment="Left" Width="173" Height="45" VerticalAlignment="Center" Grid.Row="3"/>
-        <Label x:Name="___No_Name__Copy2" Content="Monto:" Margin="54,19,0,0" FontSize="24" HorizontalAlignment="Left" Width="108" Height="40" VerticalAlignment="Top" Grid.Row="5"/>
-        <Label x:Name="___No_Name__Copy4" Content="Fecha:" Margin="54,0,0,0" FontSize="22" Height="35" VerticalAlignment="Center" HorizontalAlignment="Left" Width="115" Grid.Row="6"/>
-        <TextBox x:Name="IdInscripcionTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="306" Height="41" FontSize="22" Grid.Column="1" Grid.Row="1"/>
+        <Label x:Name="___No_Name_" Content="Isncripción ID:" FontSize="24" HorizontalAlignment="Center" Width="166" Height="46" VerticalAlignment="Center" Grid.Row="1"/>
+        <Label x:Name="___No_Name__Copy" Content="Persona ID:" Margin="54,0,0,0" FontSize="24" HorizontalAlignment="Left" Width="173" Height="45" VerticalAlignment="Center" Grid.Row="2"/>
+        <Label x:Name="___No_Name__Copy1" Content="Comentarios:" Margin="60,0,0,0" FontSize="24" HorizontalAlignment="Left" Width="174" Height="45" VerticalAlignment="Center" Grid.Row="4"/>
+        <Label x:Name="___No_Name__Copy2" Content="Monto:" FontSize="24" HorizontalAlignment="Left" Width="108" Height="40" VerticalAlignment="Top" Grid.Row="5" Margin="64,20,0,0"/>
+        <Label x:Name="___No_Name__Copy4" Content="Fecha:" Margin="64,0,0,0" FontSize="24" Height="35" VerticalAlignment="Center" HorizontalAlignment="Left" Width="116" Grid.Row="3"/>
+        <TextBox x:Name="InscripcionIdTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="306" Height="41" FontSize="22" Grid.Column="1" Grid.Row="1"/>
         <TextBox x:Name="PersonaIdTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="306" Height="45" FontSize="22" Grid.Column="1" Grid.Row="2"/>
-        <TextBox x:Name="ComentariosTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="306" Height="45" FontSize="22" Grid.Column="1" Grid.Row="3"/>
-        <TextBox x:Name="MontoTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="306" Height="42" FontSize="22" Grid.Column="1" Grid.Row="5" Margin="0,19,0,0"/>
-        <DatePicker x:Name="FechaDatePicker" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35" FontSize="24" Grid.Column="1" Width="306" Grid.Row="6"/>
+        <TextBox x:Name="ComentariosTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="306" Height="45" FontSize="22" Grid.Column="1" Grid.Row="4" Margin="0,24,0,0"/>
+        <TextBox x:Name="MontoTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="306" Height="42" FontSize="22" Grid.Column="1" Grid.Row="5"/>
+        <DatePicker x:Name="FechaDatePicker" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35" FontSize="24" Grid.Column="1" Width="306" Grid.Row="3"/>
         <Button x:Name="NuevoButton" Content="Nuevo" HorizontalAlignment="Left" Margin="88,0,0,0" VerticalAlignment="Center" Width="74" FontSize="24" Cursor="Hand" Height="36" Grid.Row="8" Click="NuevoButton_Click"/>
         <Button x:Name="GuardarButton" Content="Guardar" HorizontalAlignment="Center" VerticalAlignment="Center" Width="104" Height="36" FontSize="24" Cursor="Hand" Grid.Column="1" Grid.Row="8" Click="GuardarButton_Click"/>
         <Button x:Name="EliminarButton" Content="Eliminar" HorizontalAlignment="Left" Margin="35,0,0,0" VerticalAlignment="Center" Width="105" Height="36" FontSize="24" Cursor="Hand" Grid.Column="2" Grid.Row="8" Click="EliminarButton_Click"/>
         <Button x:Name="BuscarButton" Content="Buscar" HorizontalAlignment="Center" VerticalAlignment="Center" Height="36" Width="100" FontSize="24" Cursor="Hand" Grid.Column="2" Grid.Row="1" Click="BuscarButton_Click"/>
-        <Label x:Name="___No_Name__Copy5" Content="Balance:" FontSize="24" HorizontalAlignment="Left" Width="128" Height="45" VerticalAlignment="Center" Grid.Row="7" Margin="54,0,0,0"/>
-        <TextBox x:Name="BalanceTextBox" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="306" FontSize="22" Height="45"/>
-        <Label x:Name="___No_Name__Copy3" Content="Nombre:" Margin="54,0,0,0" FontSize="24" HorizontalAlignment="Left" Width="108" Height="40" VerticalAlignment="Center" Grid.Row="4"/>
-        <TextBox x:Name="NombreTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="306" Height="42" FontSize="22" Grid.Column="1" Grid.Row="4" Margin="0,20,0,0"/>
+        <Label x:Name="___No_Name__Copy5" Content="Balance:" FontSize="24" HorizontalAlignment="Left" Width="128" Height="45" VerticalAlignment="Center" Grid.Row="7" Margin="64,0,0,0"/>
+        <Label x:Name="___No_Name__Copy3" Content="Deposito:" Margin="64,0,0,0" FontSize="24" HorizontalAlignment="Left" Width="128" Height="40" VerticalAlignment="Center" Grid.Row="6"/>
+        <TextBlock x:Name="BalanceTextBlock" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="306" FontSize="22" Background="White"/>
+        <TextBox x:Name="DepositoTextBox" Grid.Column="1" HorizontalAlignment="Center" Margin="0,29,0,0" Grid.Row="6" TextWrapping="Wrap" VerticalAlignment="Top" Width="306" FontSize="24"/>
     </Grid>
 </Window>

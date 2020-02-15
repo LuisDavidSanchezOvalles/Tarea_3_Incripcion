@@ -14,7 +14,7 @@ namespace Registro2.Entidades
         public string Direccion { get; set; }
         public string Telefono { get; set; }
         public DateTime FechaNacimiento { get; set; }
-        public int Balance { get; set; }
+        public decimal Balance { get; set; }
 
         public Personas()
         {

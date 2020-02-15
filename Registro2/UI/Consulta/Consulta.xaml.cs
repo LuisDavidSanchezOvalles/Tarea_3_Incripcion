@@ -37,8 +37,16 @@ namespace Registro2.UI.Consulta
                         Listado = PersonasBLL.GetList(p => true);
                         break;
                     case 1://Id
-                        int Id = Convert.ToInt32(CriterioTextBox.Text);
-                        Listado = PersonasBLL.GetList(p => p.PersonaId == Id);
+                        try
+                        {
+                            int id = Convert.ToInt32(CriterioTextBox.Text);
+                            Listado = PersonasBLL.GetList(p => p.PersonaId == id);
+                            MessageBox.Show("ID");
+                        }
+                        catch (FormatException)
+                        {
+                            MessageBox.Show("Por favor, ingrese un ID valido");
+                        }
                         break;
                     case 2://Nombre
                         Listado = PersonasBLL.GetList(p => p.Nombres.Contains(CriterioTextBox.Text));

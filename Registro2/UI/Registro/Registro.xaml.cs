@@ -10,8 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Registro2.BLL;
-using Registro2.DLL;
 using Registro2.Entidades;
+using Registro2.UI.Consulta;
 
 namespace Registro2.UI.Registro
 {
@@ -20,220 +20,184 @@ namespace Registro2.UI.Registro
     /// </summary>
     public partial class Registro : Window
     {
-        const int COSTO = 4600;
         public Registro()
         {
             InitializeComponent();
-            BalanceTextBox.Text = "4600";
+            PersonaIdTextBox.Text = "0";
+            BalanceTextBlock.Text = "0";
         }
+
+        private void Limpiar()
+        {
+            PersonaIdTextBox.Text = "0";
+            NombresTextBox.Text = string.Empty;
+            TelefonoTextBox.Text = string.Empty;
+            CedulaTextBox.Text = string.Empty; ;
+            DireccionTextBox.Text = string.Empty;
+            BalanceTextBlock.Text = "0";
+        }
+
         private void NuevoButton_Click(object sender, RoutedEventArgs e)
         {
-            limpiar();
+            Limpiar();
+        }
+
+        private Personas LlenaClase()
+        {
+            Personas personas = new Personas();
+
+            personas.PersonaId = Convert.ToInt32(PersonaIdTextBox.Text);
+            personas.Nombres = NombresTextBox.Text;
+            personas.Telefono = TelefonoTextBox.Text;
+            personas.Cedula = CedulaTextBox.Text;
+            personas.Direccion = DireccionTextBox.Text;
+            personas.FechaNacimiento = Convert.ToDateTime(FechaDatePicker.SelectedDate);
+
+            return personas;
+        }
+
+        private void LlenaCampo(Personas personas)
+        {
+            PersonaIdTextBox.Text = Convert.ToString(personas.PersonaId);
+            NombresTextBox.Text = personas.Nombres;
+            TelefonoTextBox.Text = personas.Telefono;
+            CedulaTextBox.Text = personas.Cedula;
+            DireccionTextBox.Text = personas.Direccion;
+            FechaDatePicker.SelectedDate = personas.FechaNacimiento;
+            BalanceTextBlock.Text = Convert.ToString(personas.Balance);
+        }
+
+        private bool Validar()
+        {
+            bool paso = true;
+
+            if(string.IsNullOrWhiteSpace(NombresTextBox.Text))
+            {
+                MessageBox.Show("No se Permite dejar Campos Vacíos");
+                NombresTextBox.Focus();
+                paso = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(TelefonoTextBox.Text))
+            {
+                MessageBox.Show("No se Permite dejar Campos Vacíos");
+                TelefonoTextBox.Focus();
+                paso = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(CedulaTextBox.Text))
+            {
+                MessageBox.Show("No se Permite dejar Campos Vacíos");
+                CedulaTextBox.Focus();
+                paso = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(DireccionTextBox.Text))
+            {
+                MessageBox.Show("No se Permite dejar Campos Vacíos");
+                DireccionTextBox.Focus();
+                paso = false;
+            }
+
+            return paso;
+        }
+
+        private bool ExisteEnLaBaseDeDatos()
+        {
+            Personas personas = PersonasBLL.Buscar(Convert.ToInt32(PersonaIdTextBox));
+
+            return personas != null;
+        }
+
+        private bool IdentificarInscripcion(int IdInscripcion)
+        {
+            bool paso = false;
+            Inscripciones inscripcion;
+            var listado = new List<Inscripciones>();
+            listado = InscripcionesBLL.GetList(p => true);
+            int cantidad = listado.Count;
+
+            for (int i = 1; i <= cantidad; i++)
+            {
+                inscripcion = InscripcionesBLL.Buscar(i);
+                if (inscripcion.PersonaId == IdInscripcion)
+                {
+                    return paso = true;
+                }
+            }
+            return paso;
         }
 
         private void GuardarButton_Click(object sender, RoutedEventArgs e)
         {
-            Personas persona = new Personas();
-            Inscripciones inscripcion = new Inscripciones();
+            Personas personas;
             bool paso = false;
 
-            if (!validar())
+            if (!Validar())
                 return;
 
-            persona = llenaClaseP();
-            inscripcion = llenaClaseI();
+            personas = LlenaClase();
 
-
-            if (Convert.ToInt32(IdTextBox.Text) == 0)
-            {
-                paso = PersonasBLL.Guardar(persona);
-                inscripcion = EnlazarLlave(inscripcion);
-                paso = InscripcionesBLL.Guardar(inscripcion);
-            }
+            if (PersonaIdTextBox.Text == "0")
+                paso = PersonasBLL.Guardar(personas);
             else
             {
-                if (!existeEnLaBaseDeDatos())
+                if (!ExisteEnLaBaseDeDatos())
                 {
-                    MessageBox.Show("No se puede modificar una persona que no existe", "Fallo", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("No se puede modificar porque no existe en la base de datos");
                     return;
                 }
-
-                if (InscripcionCheckBox.IsChecked == true)
-                {
-                    persona = aumentarBalance(persona);
-                    paso = PersonasBLL.Modificar(persona);
-                    paso = InscripcionesBLL.Guardar(inscripcion);
-                }
-                else
-                    paso = PersonasBLL.Modificar(persona);
+                paso = PersonasBLL.Modificar(personas);
             }
+
 
             if (paso)
             {
-                limpiar();
-                MessageBox.Show("Guardado", "Exito", MessageBoxButton.OK, MessageBoxImage.Information);
+                Limpiar();
+                MessageBox.Show("Guardado!!");
+
             }
             else
-                MessageBox.Show("No fue posible guardar", "Fallo", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        private void BuscarButton_Click(object sender, RoutedEventArgs e)
-        {
-            int id;
-            Personas persona = new Personas();
-            int.TryParse(IdTextBox.Text, out id);
-
-            limpiar();
-
-            persona = PersonasBLL.Buscar(id);
-
-            if (persona != null)
-            {
-                MessageBox.Show("Persona Encontrada");
-                llenaCampo(persona);
-            }
-            else
-            {
-                MessageBox.Show("Persona no Encontrada");
-            }
+                MessageBox.Show("No se Pudo Guardar");
         }
 
         private void EliminarButton_Click(object sender, RoutedEventArgs e)
         {
             int id;
-            int.TryParse(IdTextBox.Text, out id);
+            int.TryParse(PersonaIdTextBox.Text, out id);
 
-            limpiar();
+            Limpiar();
 
-            if (PersonasBLL.Eliminar(id))
-                MessageBox.Show("Eliminado", "Exito", MessageBoxButton.OK, MessageBoxImage.Information);
-            else
-                MessageBox.Show("No se puede eliminar una persona que no existe");
-        }
-
-        private bool existeEnLaBaseDeDatos()
-        {
-
-            Personas persona = PersonasBLL.Buscar(Convert.ToInt32(IdTextBox.Text));
-            return (persona != null);
-        }
-
-        private void limpiar()
-        {
-            IdTextBox.Text = string.Empty;
-            NombreTextBox.Text = string.Empty;
-            TelefonoTextBox.Text = string.Empty;
-            CedulaTextBox.Text = string.Empty;
-            DireccionTextBox.Text = string.Empty;
-            FechaDatePicker.SelectedDate = DateTime.Now;
-            BalanceTextBox.Text = Convert.ToString(COSTO);
-        }
-
-        private void llenaCampo(Personas persona)
-        {
-            IdTextBox.Text = Convert.ToString(persona.PersonaId);
-            NombreTextBox.Text = persona.Nombres;
-            TelefonoTextBox.Text = persona.Telefono;
-            CedulaTextBox.Text = persona.Cedula;
-            DireccionTextBox.Text = persona.Direccion;
-            FechaDatePicker.SelectedDate = persona.FechaNacimiento;
-            BalanceTextBox.Text = Convert.ToString(persona.Balance);
-        }
-
-        private Personas llenaClaseP()
-        {
-            Personas persona = new Personas();
-            persona.PersonaId = Convert.ToInt32(IdTextBox.Text);
-            persona.Nombres = NombreTextBox.Text;
-            persona.Telefono = TelefonoTextBox.Text;
-            persona.Cedula = CedulaTextBox.Text;
-            persona.Direccion = DireccionTextBox.Text;
-            persona.FechaNacimiento = (DateTime)FechaDatePicker.SelectedDate;
-            persona.Balance = Convert.ToInt32(BalanceTextBox.Text);
-
-            return persona;
-        }
-
-        private Inscripciones llenaClaseI()
-        {
-            Inscripciones inscripcion = new Inscripciones();
-            inscripcion.InscripcionId = 0;
-            inscripcion.Fecha = DateTime.Now;
-            inscripcion.PersonaId = Convert.ToInt32(IdTextBox.Text); //posible
-            inscripcion.Comentarios = "";
-            inscripcion.Monto = 0;
-            inscripcion.Balance = COSTO;
-
-            return inscripcion;
-        }
-
-        private Inscripciones EnlazarLlave(Inscripciones inscripcion)
-        {
-            inscripcion.PersonaId = PersonasBLL.UltimoRegistro();
-
-            return inscripcion;
-        }
-
-        private bool validar()
-        { //como en los campos numericos no se usan decimales no se aceptan los puntos
-
-            bool paso = true;
-
-            //PersonaId
-            if (string.IsNullOrWhiteSpace(IdTextBox.Text))
-                paso = false;
+            if (IdentificarInscripcion(id) == true)
+            {
+                MessageBox.Show("No se puede eliminar este Estudiante porque tiene una inscripción creada.");
+            }
             else
             {
-                for (int i = 0; i < IdTextBox.Text.Length; i++)
-                {
-                    if (!Char.IsDigit(IdTextBox.Text[i]) || Convert.ToInt32(IdTextBox.Text[i]) < 0)
-                        paso = false;
-                }
+                if (PersonasBLL.Eliminar(id))
+                    MessageBox.Show("Estudiante Eliminado");
+                else
+                    MessageBox.Show("No se puede eliminar, porque no existe.");
             }
-
-            //Nombre
-            if (NombreTextBox.Text == string.Empty)
-                paso = false;
-
-            //Telefono
-            if (string.IsNullOrWhiteSpace(TelefonoTextBox.Text.Replace("-", "")))
-                paso = false;
-            else
-            {
-                for (int i = 0; i < TelefonoTextBox.Text.Length; i++)
-                {
-                    if (!Char.IsDigit(TelefonoTextBox.Text[i]) || Convert.ToInt32(TelefonoTextBox.Text[i]) < 0)
-                        paso = false;
-                }
-            }
-
-            //Direccion
-            if (string.IsNullOrWhiteSpace(DireccionTextBox.Text))
-                paso = false;
-
-            //Cedula
-            if (string.IsNullOrWhiteSpace(CedulaTextBox.Text.Replace("-", "")))
-                paso = false;
-            else
-            {
-                for (int i = 0; i < CedulaTextBox.Text.Length; i++)
-                {
-                    if (!Char.IsDigit(CedulaTextBox.Text[i]))
-                        paso = false;
-                }
-            }
-
-            if (paso == false)
-                MessageBox.Show("Datos invalidos");
-
-            return paso;
         }
 
-        private Personas aumentarBalance(Personas persona)
+        private void BuscarButton_Click(object sender, RoutedEventArgs e)
         {
-            persona.Balance += 4600;
+            int id;
+            Personas personas = new Personas();
+            int.TryParse(PersonaIdTextBox.Text, out id);
 
-            return persona;
+            Limpiar();
+
+            personas = PersonasBLL.Buscar(id);
+            if (personas != null)
+            {
+                LlenaCampo(personas);
+            }
+            else
+            {
+                MessageBox.Show("Estudiante no encontrado");
+            }
         }
     }
 }

@@ -12,8 +12,9 @@ namespace Registro2.Entidades
         public DateTime Fecha { get; set; }
         public int PersonaId { get; set; }
         public string Comentarios { get; set; }
-        public int Monto { get; set; }
-        public int Balance { get; set; }
+        public decimal Monto { get; set; }
+        public decimal Deposito { get; set; }
+        public decimal Balance { get; set; }
 
         public Inscripciones()
         {
@@ -21,6 +22,7 @@ namespace Registro2.Entidades
             Fecha = DateTime.Now;
             PersonaId = 0;
             Comentarios = string.Empty;
+            Deposito = 0;
             Monto = 0;
             Balance = 0;
         }

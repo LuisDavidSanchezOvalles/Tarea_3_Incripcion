@@ -116,27 +116,5 @@ namespace Registro2.BLL
 
             return Lista;
         }
-
-        public static int UltimoRegistro()
-        {
-            int valor = 0;
-            Contexto db = new Contexto();
-
-            try
-            {
-                var registroMasActualizado = db.Set<Personas>().OrderByDescending(t => t.PersonaId).FirstOrDefault();
-                valor = registroMasActualizado.PersonaId;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                db.Dispose();
-            }
-
-            return valor;
-        }
     }
 }

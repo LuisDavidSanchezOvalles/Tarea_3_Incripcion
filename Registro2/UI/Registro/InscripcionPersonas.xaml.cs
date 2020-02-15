@@ -20,194 +20,237 @@ namespace Registro2.UI.Registro
     /// </summary>
     public partial class InscripcionPersonas : Window
     {
-        const int COSTO = 2600;
         public InscripcionPersonas()
         {
             InitializeComponent();
+            InscripcionIdTextBox.Text = "0";
+            PersonaIdTextBox.Text = "0";
             FechaDatePicker.SelectedDate = DateTime.Now;
+            DepositoTextBox.Text = "0";
+        }
+
+        private void Limpiar()
+        {
+            InscripcionIdTextBox.Text = "0";
+            PersonaIdTextBox.IsEnabled = true;
+            PersonaIdTextBox.Text = "0";
+            ComentariosTextBox.Text = string.Empty;
+            DepositoTextBox.Text = "0";
+            MontoTextBox.Text = string.Empty;
+            FechaDatePicker.SelectedDate = DateTime.Now;
+            BalanceTextBlock.Text = "0";
+        }
+
+        private void NuevoButton_Click(object sender, RoutedEventArgs e)
+        {
+            PersonaIdTextBox.IsEnabled = true;
+            Limpiar();
+        }
+
+
+        private Inscripciones LlenaClase()
+        {
+            Inscripciones inscripciones = new Inscripciones();
+
+            inscripciones.InscripcionId = Convert.ToInt32(InscripcionIdTextBox.Text);
+            inscripciones.PersonaId = Convert.ToInt32(PersonaIdTextBox.Text);
+            inscripciones.Fecha = Convert.ToDateTime(FechaDatePicker.SelectedDate);
+            inscripciones.Comentarios = ComentariosTextBox.Text;
+            inscripciones.Monto = Convert.ToDecimal(MontoTextBox.Text);
+            inscripciones.Deposito = Convert.ToDecimal(DepositoTextBox.Text);
+            inscripciones.Balance = inscripciones.Monto - inscripciones.Deposito;
+
+            return inscripciones;
+        }
+
+        private void LlenaCampo(Inscripciones inscripciones)
+        {
+            InscripcionIdTextBox.Text = Convert.ToString(inscripciones.InscripcionId);
+            PersonaIdTextBox.Text = Convert.ToString(inscripciones.PersonaId);
+            FechaDatePicker.SelectedDate = inscripciones.Fecha;
+            ComentariosTextBox.Text = inscripciones.Comentarios;
+            MontoTextBox.Text = Convert.ToString(inscripciones.Balance);//esto es porque es lo que debe la persona
+            DepositoTextBox.Text = Convert.ToString(inscripciones.Deposito);
+            BalanceTextBlock.Text = Convert.ToString(inscripciones.Balance);
+        }
+
+        private bool Validar()
+        {
+            bool paso = true;
+
+            if(string.IsNullOrWhiteSpace(InscripcionIdTextBox.Text))
+            {
+                MessageBox.Show("EL Campo Inscripción ID No Puede Estar Vacío");
+                ComentariosTextBox.Focus();
+                paso = false;
+            }
+            else
+            {
+                try
+                {
+                    int i = Convert.ToInt32(InscripcionIdTextBox.Text);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("El Campo Inscripción ID debe tener Numeros");
+                    InscripcionIdTextBox.Focus();
+                    paso = false;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(ComentariosTextBox.Text))
+            {
+                MessageBox.Show("EL Campo Comentario No Puede Estar Vacío");
+                ComentariosTextBox.Focus();
+                paso = false;
+            }
+
+            //para que lea solo en numeros y que no este en blanco
+            if (string.IsNullOrWhiteSpace(DepositoTextBox.Text))
+            {
+                MessageBox.Show("EL Campo Deposito No Puede Estar Vacío");
+                DepositoTextBox.Focus();
+                paso = false;
+            }
+            else
+            {
+                try
+                {
+                    decimal d = Convert.ToDecimal(DepositoTextBox.Text);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("El Campo deposito debe tener Numeros");
+                    DepositoTextBox.Focus();
+                    paso = false;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(MontoTextBox.Text))
+            {
+                MessageBox.Show("EL Campo Monto No Puede Estar Vacío");
+                MontoTextBox.Focus();
+                paso = false;
+            }
+            else
+            {
+                try
+                {
+                    decimal d = Convert.ToDecimal(MontoTextBox.Text);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("El Campo deposito debe tener Numeros");
+                    MontoTextBox.Focus();
+                    paso = false;
+                }
+            }
+
+            return paso;
+        }
+
+        private bool ExisteEnLaBaseDeDatosIncripciones()
+        {
+            Inscripciones inscripciones = InscripcionesBLL.Buscar(Convert.ToInt32(InscripcionIdTextBox.Text));
+
+            return inscripciones != null;
+        }
+
+        private bool ExisteEnLaBaseDeDatosPersonas()
+        {
+            Personas personas = PersonasBLL.Buscar(Convert.ToInt32(PersonaIdTextBox.Text));
+
+            return (personas != null);
+        }
+
+        //Para Verificar que existe el PersonaID en la la Inscripcion
+        private bool PersonaIdExisteEnInscripcion()
+        {
+            bool paso = false;
+            Inscripciones inscripciones;
+            var listado = new List<Inscripciones>();
+            listado = InscripcionesBLL.GetList(p => true);
+            int cantidad = listado.Count;
+
+            for (int i = 1; i <= cantidad; i++)
+            {
+                inscripciones = InscripcionesBLL.Buscar(i);
+                if (inscripciones.PersonaId == Convert.ToInt32(PersonaIdTextBox.Text))
+                {
+                    paso = true;
+                }
+            }
+            return paso;
         }
 
         private void GuardarButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Convert.ToInt32(BalanceTextBox.Text) <= 0)
-                return;
-
-            Inscripciones inscripcion;
+            Inscripciones inscripciones;
             bool paso = false;
 
-            if (!validar())
+            if (!Validar())
                 return;
 
-            if (existeEnLaBaseDeDatos())
+            inscripciones = LlenaClase();
+
+            //aca determina ademas de guardar o modificar si tambien existe en la Base de datos
+            if (InscripcionIdTextBox.Text == "0" && ExisteEnLaBaseDeDatosPersonas() == true)
             {
-                actualizarBalance();
-                inscripcion = llenaClaseI();
-                paso = InscripcionesBLL.Modificar(inscripcion);
+                paso = InscripcionesBLL.Guardar(inscripciones);
             }
             else
             {
-                MessageBox.Show("No se puede modificar una persona que no existe", "Fallo", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+
+                if (!ExisteEnLaBaseDeDatosIncripciones())
+                {
+                    MessageBox.Show("No se puede modificar porque no existe en la base de datos Inscripción o Persona");
+                    return;
+                }
+
+                paso = InscripcionesBLL.Modificar(inscripciones);
             }
 
             if (paso)
             {
-                limpiar();
-                MessageBox.Show("Guardado", "Exito", MessageBoxButton.OK, MessageBoxImage.Information);
+                Limpiar();
+                MessageBox.Show("Guardado!!");
             }
             else
-                MessageBox.Show("No fue posible guardar", "Fallo", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        private void BuscarButton_Click(object sender, RoutedEventArgs e)
-        {
-            int id;
-            Inscripciones inscripcion = new Inscripciones();
-            int.TryParse(IdInscripcionTextBox.Text, out id);
-
-            limpiar();
-
-            inscripcion = InscripcionesBLL.Buscar(id);
-
-            if (inscripcion != null)
-            {
-                MessageBox.Show("Persona Encontrada");
-                llenaCampo(inscripcion);
-            }
-            else
-            {
-                MessageBox.Show("Persona no Encontrada");
-            }
+                MessageBox.Show("No fue posible guardar!!");
         }
 
         private void EliminarButton_Click(object sender, RoutedEventArgs e)
         {
             int id;
-            int.TryParse(IdInscripcionTextBox.Text, out id);
+            int.TryParse(InscripcionIdTextBox.Text, out id);
+            int PersonaId;
+            int.TryParse(PersonaIdTextBox.Text, out PersonaId);
 
-            if (eliminarInscripcion(id))
+            Limpiar();
+
+            if (InscripcionesBLL.Eliminar(id, PersonaId))
+                MessageBox.Show("Balance de Inscripción Eliminado");
+            else
+                MessageBox.Show("No se puede eliminar, porque no existe.");
+        }
+
+        private void BuscarButton_Click(object sender, RoutedEventArgs e)
+        {
+            int id;
+            int.TryParse(InscripcionIdTextBox.Text, out id);
+            Inscripciones inscripciones = new Inscripciones();
+
+            Limpiar();
+
+            inscripciones = InscripcionesBLL.Buscar(id);
+
+            if (inscripciones != null)
             {
-                MessageBox.Show("Eliminado", "Exito", MessageBoxButton.OK, MessageBoxImage.Information);
+                PersonaIdTextBox.IsEnabled = false;
+                LlenaCampo(inscripciones);
             }
             else
-                MessageBox.Show("No se puede eliminar una persona que no existe");
-
-            limpiar();
-        }
-
-        private void limpiar()
-        {
-            IdInscripcionTextBox.Text = string.Empty;
-            FechaDatePicker.SelectedDate = DateTime.Now;
-            PersonaIdTextBox.Text = string.Empty;
-            NombreTextBox.Text = string.Empty;
-            BalanceTextBox.Text = string.Empty;
-            MontoTextBox.Text = string.Empty;
-        }
-
-        private void llenaCampo(Inscripciones inscripcion)
-        {
-            IdInscripcionTextBox.Text = Convert.ToString(inscripcion.InscripcionId);
-            FechaDatePicker.SelectedDate = inscripcion.Fecha;
-            PersonaIdTextBox.Text = Convert.ToString(inscripcion.PersonaId);
-            NombreTextBox.Text = nombrePersona(inscripcion.PersonaId);
-            BalanceTextBox.Text = Convert.ToString(inscripcion.Balance);
-            ComentariosTextBox.Text = inscripcion.Comentarios;
-        }
-
-        private Inscripciones llenaClaseI()
-        {
-            Inscripciones inscripcion = new Inscripciones();
-            inscripcion.InscripcionId = Convert.ToInt32(IdInscripcionTextBox.Text);
-            inscripcion.Fecha = DateTime.Now;
-            inscripcion.PersonaId = Convert.ToInt32(PersonaIdTextBox.Text); //posible
-            inscripcion.Balance = Convert.ToInt32(BalanceTextBox.Text) - Convert.ToInt32(MontoTextBox.Text);
-            inscripcion.Monto = aumentarMonto();
-            inscripcion.Comentarios = ComentariosTextBox.Text;
-
-            return inscripcion;
-        }
-
-        public string nombrePersona(int PersonaId)
-        {
-            Personas persona = PersonasBLL.Buscar(PersonaId);
-
-            return persona.Nombres;
-        }
-
-        public int aumentarMonto()
-        {
-            Inscripciones montoViejo = InscripcionesBLL.Buscar(Convert.ToInt32(IdInscripcionTextBox.Text));
-            int monto = Convert.ToInt32(MontoTextBox.Text);
-            monto += montoViejo.Monto;
-
-            return monto;
-        }
-
-        public void actualizarBalance()
-        {
-            Personas persona = PersonasBLL.Buscar(Convert.ToInt32(PersonaIdTextBox.Text));
-            persona.Balance -= Convert.ToInt32(MontoTextBox.Text);
-            PersonasBLL.Modificar(persona);
-        }
-
-        public bool eliminarInscripcion(int id)
-        {
-            Inscripciones inscripcion = InscripcionesBLL.Buscar(id);
-            Personas persona = PersonasBLL.Buscar(inscripcion.PersonaId);
-
-            persona.Balance -= inscripcion.Balance;
-
-            PersonasBLL.Modificar(persona);
-
-            return InscripcionesBLL.Eliminar(id);
-        }
-
-        private bool existeEnLaBaseDeDatos()
-        {
-
-            Inscripciones inscripcion = InscripcionesBLL.Buscar(Convert.ToInt32(IdInscripcionTextBox.Text));
-            return (inscripcion != null);
-        }
-
-        private bool validar()
-        { //como en los campos numericos no se usan decimales no se aceptan los puntos
-
-            bool paso = true;
-
-            //InscripcionId
-            if (string.IsNullOrWhiteSpace(IdInscripcionTextBox.Text))
-                paso = false;
-            else
-            {
-                for (int i = 0; i < IdInscripcionTextBox.Text.Length; i++)
-                {
-                    if (!Char.IsDigit(IdInscripcionTextBox.Text[i]) || Convert.ToInt32(IdInscripcionTextBox.Text[i]) < 0)
-                        paso = false;
-                }
-            }
-
-            //Monto
-            if (string.IsNullOrWhiteSpace(MontoTextBox.Text))
-                paso = false;
-            else
-            {
-                for (int i = 0; i < MontoTextBox.Text.Length; i++)
-                {
-                    if (!Char.IsDigit(MontoTextBox.Text[i]) || Convert.ToInt32(MontoTextBox.Text[i]) < 0)
-                        paso = false;
-                }
-            }
-
-            if (paso == false)
-                MessageBox.Show("Datos invalidos");
-
-            return paso;
-        }
-
-        private void NuevoButton_Click(object sender, RoutedEventArgs e)
-        {
-            limpiar();
+                MessageBox.Show("Incripcion no Encontrada");
         }
     }
 }

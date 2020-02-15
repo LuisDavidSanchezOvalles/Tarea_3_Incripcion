@@ -12,22 +12,22 @@ Cedula varchar(13),
 Telefono varchar(13),
 Direccion varchar(max),
 FechaNacimiento Date default GetDate(),
-Balance int,
+Balance decimal,
 );
 
-Create Table Inscripcion
+Create Table Inscripciones
 (
 InscripcionId int primary key identity,
 Fecha dateTime default GetDate(),
 PersonaId int,
 Comentarios varchar(max),
-Monto int,
-Balance int,
+Monto decimal,
+Deposito decimal,
+Balance decimal,
 );
 
 select * from Personas
-
-delete Personas where PersonaId = 3
+select * from Inscripciones
 
 drop Table Personas
-drop Table Inscripcion
+drop Table Inscripciones
