@@ -55,7 +55,7 @@ namespace Registro2.BLL
             return paso;
         }
 
-        private static bool AfectarBalancePersonaAlModificar(Inscripciones incripciones)
+        private static bool AfectarBalancePersonasAlModificar(Inscripciones incripciones)
         {
             bool paso = false;
             Contexto db = new Contexto();
@@ -87,7 +87,7 @@ namespace Registro2.BLL
                 if (inscripciones.Deposito > 0)
                 {
                     db.Entry(inscripciones).State = EntityState.Modified;
-                    paso = db.SaveChanges() > 0 && AfectarBalancePersonaAlModificar(inscripciones);
+                    paso = db.SaveChanges() > 0 && AfectarBalancePersonasAlModificar(inscripciones);
                 }
                 else
                 {
