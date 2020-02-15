@@ -55,13 +55,13 @@ namespace Registro2.BLL
             return paso;
         }
 
-        private static bool AfectarBalanceEstudianteAlModificar(Inscripciones incripciones)
+        private static bool AfectarBalancePersonaAlModificar(Inscripciones incripciones)
         {
             bool paso = false;
             Contexto db = new Contexto();
             try
             {
-                db.Personas.Find(incripciones.PersonaId).Balance -= incripciones.Monto;
+                db.Personas.Find(incripciones.PersonaId).Balance -= incripciones.Deposito;
                 paso = db.SaveChanges() > 0;
             }
             catch (Exception)
@@ -84,10 +84,10 @@ namespace Registro2.BLL
 
             try
             {
-                if (inscripciones.Monto > 0)
+                if (inscripciones.Deposito > 0)
                 {
                     db.Entry(inscripciones).State = EntityState.Modified;
-                    paso = db.SaveChanges() > 0 && AfectarBalanceEstudianteAlModificar(inscripciones);
+                    paso = db.SaveChanges() > 0 && AfectarBalancePersonaAlModificar(inscripciones);
                 }
                 else
                 {
