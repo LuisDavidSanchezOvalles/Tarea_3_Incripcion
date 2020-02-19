@@ -11,7 +11,7 @@ namespace Registro2.BLL
 {
     public class InscripcionesBLL
     {
-        private static bool AfectarBalancePersona(Inscripciones inscripciones)
+        private static bool AfectarBalancePersonaEInscripcion(Inscripciones inscripciones)
         {
             bool paso = false;
             Contexto db = new Contexto();
@@ -44,7 +44,7 @@ namespace Registro2.BLL
             try
             {
                 if (db.Inscripciones.Add(inscripciones) != null)
-                    paso = db.SaveChanges() > 0 && AfectarBalancePersona(inscripciones);
+                    paso = db.SaveChanges() > 0 && AfectarBalancePersonaEInscripcion(inscripciones);
             }
             catch (Exception)
             {
@@ -58,7 +58,7 @@ namespace Registro2.BLL
             return paso;
         }
 
-        private static bool AfectarBalancePersonasAlModificar(Inscripciones inscripciones)
+        private static bool AfectarBalancePersonasEInscripcionAlModificar(Inscripciones inscripciones)
         {
             bool paso = false;
             Contexto db = new Contexto();
@@ -100,7 +100,7 @@ namespace Registro2.BLL
             try
             {
                db.Entry(inscripciones).State = EntityState.Modified;
-               paso = db.SaveChanges() > 0 && AfectarBalancePersonasAlModificar(inscripciones);
+               paso = db.SaveChanges() > 0 && AfectarBalancePersonasEInscripcionAlModificar(inscripciones);
             }
             catch (Exception)
             {
