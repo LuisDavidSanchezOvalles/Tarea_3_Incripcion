@@ -18,6 +18,9 @@ namespace Registro2.BLL
 
             try
             {
+                inscripciones.Balance = db.Inscripciones.Find(inscripciones.InscripcionId).Monto - db.Inscripciones.Find(inscripciones.InscripcionId).Deposito;
+
+                db.Inscripciones.Find(inscripciones.InscripcionId).Balance += inscripciones.Balance;
                 db.Personas.Find(inscripciones.PersonaId).Balance += inscripciones.Balance;
                 paso = db.SaveChanges() > 0;
             }
@@ -55,14 +58,26 @@ namespace Registro2.BLL
             return paso;
         }
 
-        private static bool AfectarBalancePersonasAlModificar(Inscripciones incripciones)
+        private static bool AfectarBalancePersonasAlModificar(Inscripciones inscripciones)
         {
             bool paso = false;
             Contexto db = new Contexto();
             try
             {
-                db.Personas.Find(incripciones.PersonaId).Balance -= incripciones.Deposito;
-                paso = db.SaveChanges() > 0;
+                if(db.Personas.Find(inscripciones.PersonaId).Balance == 0)
+                {
+                    inscripciones.Balance = db.Inscripciones.Find(inscripciones.InscripcionId).Monto - db.Inscripciones.Find(inscripciones.InscripcionId).Deposito;
+
+                    db.Inscripciones.Find(inscripciones.InscripcionId).Balance += inscripciones.Balance;
+                    db.Personas.Find(inscripciones.PersonaId).Balance += inscripciones.Balance;
+                    paso = db.SaveChanges() > 0;
+                }
+                else
+                {
+                    db.Inscripciones.Find(inscripciones.InscripcionId).Balance = inscripciones.Monto - inscripciones.Deposito;
+                    db.Personas.Find(inscripciones.PersonaId).Balance -= inscripciones.Deposito;
+                    paso = db.SaveChanges() > 0;
+                }
             }
             catch (Exception)
             {
@@ -84,16 +99,8 @@ namespace Registro2.BLL
 
             try
             {
-                if (inscripciones.Deposito > 0)
-                {
-                    db.Entry(inscripciones).State = EntityState.Modified;
-                    paso = db.SaveChanges() > 0 && AfectarBalancePersonasAlModificar(inscripciones);
-                }
-                else
-                {
-                    db.Entry(inscripciones).State = EntityState.Modified;
-                    paso = db.SaveChanges() > 0;
-                }
+               db.Entry(inscripciones).State = EntityState.Modified;
+               paso = db.SaveChanges() > 0 && AfectarBalancePersonasAlModificar(inscripciones);
             }
             catch (Exception)
             {

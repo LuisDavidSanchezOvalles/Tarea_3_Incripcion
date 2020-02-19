@@ -13,7 +13,7 @@ namespace Registro2.DLL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server = LUISDAVIDSO\SQLEXPRESS; DataBase = PersonasDb2; Trusted_Connection = True");
+            optionsBuilder.UseSqlServer(@"Server = LUISDAVIDSO\SQLEXPRESS; Database = PersonasDb2; Trusted_Connection = True");
         }      
     }
 }

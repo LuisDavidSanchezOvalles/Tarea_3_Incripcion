@@ -47,6 +47,12 @@ namespace Registro2.UI.Registro
             Limpiar();
         }
 
+        private Inscripciones CalcularBalance(Inscripciones inscripciones)
+        {
+
+
+            return inscripciones;
+        }
 
         private Inscripciones LlenaClase()
         {
@@ -58,7 +64,6 @@ namespace Registro2.UI.Registro
             inscripciones.Comentarios = ComentariosTextBox.Text;
             inscripciones.Monto = Convert.ToDecimal(MontoTextBox.Text);
             inscripciones.Deposito = Convert.ToDecimal(DepositoTextBox.Text);
-            inscripciones.Balance = inscripciones.Monto - inscripciones.Deposito;
 
             return inscripciones;
         }
